@@ -18,6 +18,15 @@ namespace Products_CQRS.Commands
 
         public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
+            // Kategória ellenőrzés
+            var category = await _context.Categories.FindAsync(request.CategoryId);
+            if (category == null)
+            {
+                // Ha nem találjuk a kategóriát, hibát dobunk.
+                throw new ArgumentException("Category not found.");
+            }
+
+            // Új termék létrehozása
             var product = new Product
             {
                 Name = request.Name,
