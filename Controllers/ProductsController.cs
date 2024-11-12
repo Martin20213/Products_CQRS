@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Products_CQRS.Features.Products;
@@ -18,8 +19,9 @@ namespace Products_CQRS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(CreateProductCommand command)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
         {
+            var command = request.Adapt<CreateProductCommand>();
             var productId = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetProducts), new { id = productId }, productId);
         }

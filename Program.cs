@@ -4,9 +4,13 @@ using Products_CQRS.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 using System.Text.Json.Serialization;
+using Products_CQRS.Mappings;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Mapster
+MappingConfig.RegisterMappings();
 
 // Add services to the container.
 

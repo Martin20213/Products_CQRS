@@ -1,9 +1,12 @@
-﻿
-using MediatR;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Products_CQRS.Data;
 using Products_CQRS.Domain.Models;
-namespace Products_CQRS.Models
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace Products_CQRS.Features.Products
 {
     public record CreateProductCommand(string Name, int Price, int CategoryId) : IRequest<int>;
 
@@ -18,12 +21,14 @@ namespace Products_CQRS.Models
 
         public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            // Kategória ellenőrzés
-            var category = await _context.Categories.FindAsync(request.CategoryId);
+            // Kategória ellenőrzés CategoryId alapján az adatbázisban
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(c => c.Id == request.CategoryId, cancellationToken);
+
             if (category == null)
             {
-                // Ha nem találjuk a kategóriát, hibát dobunk.
-                throw new ArgumentException("Category not found.");
+                // Naplózzuk a hibát
+                throw new ArgumentException($"Category with Id {request.CategoryId} not found.");
             }
 
             // Új termék létrehozása
@@ -36,9 +41,9 @@ namespace Products_CQRS.Models
 
             _context.Products.Add(product);
             await _context.SaveChangesAsync(cancellationToken);
+
             return product.Id;
         }
+
     }
-
-
 }

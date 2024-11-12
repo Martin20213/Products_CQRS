@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Products_CQRS.Domain.Models;
 using Products_CQRS.Features.Categories;
-using Products_CQRS.Models;
 
 
 namespace Products_CQRS.Controllers
