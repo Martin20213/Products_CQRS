@@ -48,6 +48,29 @@ namespace Products_CQRS.Controllers
             return NotFound("Product not found");
         }
 
+        // PUT: api/products/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditProduct(int id, [FromBody] EditProductCommand command)
+        {
+            if (id != command.Id)
+            {
+                // Ha az ID nem egyezik, válaszoljunk 400-as hibával
+                return BadRequest("ID mismatch");
+            }
+
+            // Meghívjuk az EditProductCommand-ot a MediatR segítségével
+            var result = await _mediator.Send(command);
+
+            if (result)
+            {
+                // Ha sikerült a módosítás, 200 OK választ küldünk
+                return Ok("Product updated successfully");
+            }
+
+            // Ha nem található a termék, válaszoljunk 404-es hibával
+            return NotFound("Product not found");
+        }
+
     }
 
 
