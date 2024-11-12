@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Products_CQRS.Data;
 using Products_CQRS.Domain.Models;
-namespace Products_CQRS.Commands
+namespace Products_CQRS.Models
 {
-    public record CreateCategoryCommand(string Name): IRequest<int>;
+    public record CreateCategoryCommand(string Name) : IRequest<int>;
 
 
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>

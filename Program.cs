@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Products_CQRS.Data;
 using Microsoft.Extensions.DependencyInjection;
-using Products_CQRS.Commands;
+
 using System.Text.Json.Serialization;
 
 

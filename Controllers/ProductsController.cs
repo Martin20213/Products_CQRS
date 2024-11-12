@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Products_CQRS.Commands;
+using Products_CQRS.Models;
 
 namespace Products_CQRS.Controllers
 {

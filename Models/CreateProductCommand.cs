@@ -2,11 +2,11 @@
 using MediatR;
 using Products_CQRS.Data;
 using Products_CQRS.Domain.Models;
-namespace Products_CQRS.Commands
+namespace Products_CQRS.Models
 
 {
     public record CreateProductCommand(string Name, int Price, int CategoryId) : IRequest<int>;
-    
+
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
     {
         private readonly ApplicationDbContext _context;
@@ -40,5 +40,5 @@ namespace Products_CQRS.Commands
         }
     }
 
-    
+
 }

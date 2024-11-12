@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Products_CQRS.Data;
 using Products_CQRS.Domain.Models;
-namespace Products_CQRS.Query
+namespace Products_CQRS.Features.Categories
 
 {
     public record GetCategoriesQuery : IRequest<List<Category>>;

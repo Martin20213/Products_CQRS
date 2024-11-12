@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Products_CQRS.Data;
 using Microsoft.EntityFrameworkCore;
-namespace Products_CQRS.Commands
+namespace Products_CQRS.Features.Categories
 {
     public record DeleteCategoryCommand(int Id) : IRequest<bool>;
 
