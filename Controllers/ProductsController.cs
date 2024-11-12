@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Products_CQRS.Features.Products;
 using Products_CQRS.Models;
 
 namespace Products_CQRS.Controllers
@@ -28,6 +29,23 @@ namespace Products_CQRS.Controllers
         {
             var products = await _mediator.Send(new GetProductsQuery());
             return Ok(products);
+        }
+
+        // DELETE: api/products/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            // Meghívjuk a DeleteProductCommand-ot a MediatR segítségével
+            var result = await _mediator.Send(new DeleteProductsCommand(id));
+
+            if (result)
+            {
+                // Ha sikerült a törlés, 200 OK választ küldünk
+                return Ok("Product deleted successfully");
+            }
+
+            // Ha nem található a termék, válaszoljunk 404-es hibával
+            return NotFound("Product not found");
         }
 
     }
