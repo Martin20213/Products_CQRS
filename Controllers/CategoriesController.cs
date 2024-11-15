@@ -26,12 +26,9 @@ namespace Products_CQRS.Controllers
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequest request)
         {
             // Átalakítjuk a DTO-t egy MediatR kérésre
-            var command = new CreateCategoryCommand(request.Name);
-
-            // MediatR-nek továbbítjuk a kérést
-            var result = await _mediator.Send(command);
-
-            return Ok(result);
+            var command = request.Adapt<CreateCategoryCommand>();
+            var categoryId = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetCategories), new { id = categoryId }, categoryId);
         }
         // GET: api/Categories
         [HttpGet]
@@ -43,6 +40,7 @@ namespace Products_CQRS.Controllers
         }
 
 
+        // DELETE: api/products/{id}
         // DELETE: api/products/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
@@ -68,25 +66,30 @@ namespace Products_CQRS.Controllers
 
         // PUT: api/categories/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditCategory(int id, [FromBody] EditCategoryCommand command)
+        public async Task<IActionResult> EditCategory(int id, [FromBody] EditCategoryRequest request)
         {
+            // Mappeljük a Requestet a Command-ra
+            var command = request.Adapt<EditCategoryCommand>();
+
+            // Ellenőrizzük, hogy az id a request-ben és a paraméterben egyezzen
             if (id != command.Id)
             {
-                // Ha az ID nem egyezik, válaszoljunk 400-as hibával
+                // Ha nem egyezik, 400-as hibát küldünk
                 return BadRequest("ID mismatch");
             }
 
-            // Meghívjuk az EditCategoryCommand-ot a MediatR segítségével
+            // Meghívjuk a MediatR-t, hogy hajtsa végre a parancsot
             var result = await _mediator.Send(command);
 
             if (result)
             {
-                // Ha sikerült a frissítés, 200 OK választ küldünk
+                // Ha a frissítés sikerült, 200 OK választ küldünk
                 return Ok("Category updated successfully");
             }
 
-            // Ha nem található a kategória, válaszoljunk 404-es hibával
+            // Ha nem található a kategória, 404 Not Found választ küldünk
             return NotFound("Category not found");
         }
+
     }
 }
