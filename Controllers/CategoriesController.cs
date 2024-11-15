@@ -1,8 +1,11 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 using Products_CQRS.Domain.Models;
 using Products_CQRS.Features.Categories;
+using Products_CQRS.Features.Products;
+using Products_CQRS.Models;
 
 
 namespace Products_CQRS.Controllers
@@ -20,15 +23,15 @@ namespace Products_CQRS.Controllers
 
         // POST: api/Categories
         [HttpPost]
-        public async Task<ActionResult<int>> CreateCategory([FromBody] CreateCategoryCommand command)
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequest request)
         {
-            if (command == null)
-            {
-                return BadRequest("Category data is invalid.");
-            }
+            // Átalakítjuk a DTO-t egy MediatR kérésre
+            var command = new CreateCategoryCommand(request.Name);
 
-            var categoryId = await _mediator.Send(command);
-            return CreatedAtAction(nameof(CreateCategory), new { id = categoryId }, categoryId);
+            // MediatR-nek továbbítjuk a kérést
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
         }
         // GET: api/Categories
         [HttpGet]

@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Products_CQRS.Features.Categories;
 using Products_CQRS.Features.Products;
 using Products_CQRS.Models;
 
@@ -10,6 +11,8 @@ namespace Products_CQRS.Mappings
         {
             //itt definialjuk a createproductrequest -> createproduct command mapelést
             TypeAdapterConfig<CreateProductRequest, CreateProductCommand>.NewConfig();
+
+            TypeAdapterConfig<CreateCategoryRequest, CreateCategoryCommand>.NewConfig();
         }
     }
 }
