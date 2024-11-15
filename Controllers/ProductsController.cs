@@ -37,18 +37,25 @@ namespace Products_CQRS.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            // Meghívjuk a DeleteProductCommand-ot a MediatR segítségével
-            var result = await _mediator.Send(new DeleteProductsCommand(id));
+            // Create the request object
+            var request = new DeleteProductRequest { Id = id };
+
+            // Map the request to a command using Mapster
+            var command = request.Adapt<DeleteProductsCommand>();
+
+            // Call MediatR to handle the command
+            var result = await _mediator.Send(command);
 
             if (result)
             {
-                // Ha sikerült a törlés, 200 OK választ küldünk
+                // If deletion was successful, return 200 OK
                 return Ok("Product deleted successfully");
             }
 
-            // Ha nem található a termék, válaszoljunk 404-es hibával
+            // If product is not found, return 404 Not Found
             return NotFound("Product not found");
         }
+
 
         // PUT: api/products/{id}
         [HttpPut("{id}")]

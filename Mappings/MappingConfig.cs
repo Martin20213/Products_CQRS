@@ -13,6 +13,8 @@ namespace Products_CQRS.Mappings
             TypeAdapterConfig<CreateProductRequest, CreateProductCommand>.NewConfig();
 
             TypeAdapterConfig<CreateCategoryRequest, CreateCategoryCommand>.NewConfig();
+
+            TypeAdapterConfig<DeleteProductRequest, DeleteProductsCommand>.NewConfig();
         }
     }
 }
