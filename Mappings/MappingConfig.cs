@@ -20,7 +20,7 @@ namespace Products_CQRS.Mappings
 
             TypeAdapterConfig<EditCategoryRequest, EditCategoryCommand>.NewConfig();
             
-
+            TypeAdapterConfig<EditProductRequest, EditProductCommand>.NewConfig();
         }
     }
 }

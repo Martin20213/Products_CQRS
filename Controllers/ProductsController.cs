@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Products_CQRS.Features.Categories;
 using Products_CQRS.Features.Products;
 using Products_CQRS.Models;
 
@@ -57,26 +58,30 @@ namespace Products_CQRS.Controllers
         }
 
 
-        // PUT: api/products/{id}
+        // PUT: api/categories/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditProduct(int id, [FromBody] EditProductCommand command)
+        public async Task<IActionResult> EditProduct(int id, [FromBody] EditProductRequest request)
         {
+            // Mappeljük a Requestet a Command-ra
+            var command = request.Adapt<EditProductCommand>();
+
+            // Ellenőrizzük, hogy az id a request-ben és a paraméterben egyezzen
             if (id != command.Id)
             {
-                // Ha az ID nem egyezik, válaszoljunk 400-as hibával
+                // Ha nem egyezik, 400-as hibát küldünk
                 return BadRequest("ID mismatch");
             }
 
-            // Meghívjuk az EditProductCommand-ot a MediatR segítségével
+            // Meghívjuk a MediatR-t, hogy hajtsa végre a parancsot
             var result = await _mediator.Send(command);
 
             if (result)
             {
-                // Ha sikerült a módosítás, 200 OK választ küldünk
+                // Ha a frissítés sikerült, 200 OK választ küldünk
                 return Ok("Product updated successfully");
             }
 
-            // Ha nem található a termék, válaszoljunk 404-es hibával
+            // Ha nem található a kategória, 404 Not Found választ küldünk
             return NotFound("Product not found");
         }
 
