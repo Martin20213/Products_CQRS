@@ -43,20 +43,27 @@ namespace Products_CQRS.Controllers
         }
 
 
-        // DELETE: api/Categories/{id}
+        // DELETE: api/products/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var result = await _mediator.Send(new DeleteCategoryCommand(id));
+            // Create the request object
+            var request = new DeleteCategoryRequest { Id = id };
+
+            // Map the request to a command using Mapster
+            var command = request.Adapt<DeleteCategoryCommand>();
+
+            // Call MediatR to handle the command
+            var result = await _mediator.Send(command);
 
             if (result)
             {
-                return NoContent(); // Törlés sikeres, nincs tartalom vissza
+                // If deletion was successful, return 200 OK
+                return Ok("Category deleted successfully");
             }
-            else
-            {
-                return NotFound("Category not found."); // Ha nem találjuk a kategóriát
-            }
+
+            // If product is not found, return 404 Not Found
+            return NotFound("Category not found");
         }
 
         // PUT: api/categories/{id}
